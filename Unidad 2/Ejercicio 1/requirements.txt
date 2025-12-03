@@ -1,0 +1,9 @@
+uvicorn[standard]
+python-dotenv
+fastapi
+fastapi[standard]
+mysql.connector.python
+requests
+dotenv
+pydantic
+sqlmodel
