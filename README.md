@@ -53,17 +53,17 @@ Ubicación respecto del repositorio:
 /Unidad 2/Ejercicio 1/.env
 
 #### Ejemplo:
-export SPOTFY_URI="http://127.0.0.1:PUERTO"
-export CLIENT_ID="CLIENTID"
-export CLIENT_SECRET="CLIENTSECRET"
-
-export MYSQL_ROOT_PASSWORD= "PASSWORD"
-export MYSQL_DATABASE= "DATABASENAME"
-export MYSQL_USER= "USER"
-export MYSQL_ROOT_USER= "root"
-export MYSQL_PASSWORD= "PASSWORD"
-export MYSQL_HOST= "127.0.0.1"
-export MYSQL_PORT= "PORT"
+export SPOTFY_URI="http://127.0.0.1:PUERTO"\
+export CLIENT_ID="CLIENTID"\
+export CLIENT_SECRET="CLIENTSECRET"\
+\
+export MYSQL_ROOT_PASSWORD= "PASSWORD"\
+export MYSQL_DATABASE= "DATABASENAME"\
+export MYSQL_USER= "USER"\
+export MYSQL_ROOT_USER= "root"\
+export MYSQL_PASSWORD= "PASSWORD"\
+export MYSQL_HOST= "127.0.0.1"\
+export MYSQL_PORT= "PORT"\
 
 export HOST_LOCATION= "127.0.0.1:8000"
 
