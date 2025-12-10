@@ -1,31 +1,33 @@
-from pydantic import BaseModel
 from product import *
+from baseWithId import BaseWithId
+from pydantic import BaseModel
+import json
 
-class OrderBase(BaseModel):
-    product_dict : []
-    order_id : int
+class OrderBase(BaseWithId):
+    product_dict : dict = {}
+    @property
+    def order_id (self): 
+        return self.id
 
-    def addToOrder(product_id: int, quantity: int = 1):
-        if quantity < 1: 
-            raise error
-        if product_dict[product_id]:
-            product_dict[product_id] += quantity
+    def modify_order(self, product_id: int, quantity: int = 1):
+        if self.product_dict.get(product_id):
+            self.product_dict[product_id] += quantity
+        else: 
+            self.product_dict[product_id] = quantity
+        if self.product_dict[product_id] <= 0:
+            self.product_dict.pop(product_id)
 
-class ProductInOrder():
-    def __init__(self, product : ProductBase, quantity: int):
-        self.product = product
-        self.quantity = quantity
+    def to_dict(self):
+        # Return a simple, serializable dictionary
+        tmp = []
+        json_dict = {'order_id': self.order_id}
 
-class OrderNode():
-
-    def __init__(self, order : OrderBase, prev : OrderNode | None = None, next: OrderNode | None = None):
-        self.hash = hash(order.order_id)
-        self.order = order
-        self.prev = prev
-        self.next = next
+        json_dict.update({'product_dict': self.product_dict})
+        
+        return json_dict
+    
 
 class OrderUpdate(BaseModel):
-    order_id : int | None
-    next_order: int | None 
-    prev_order: int | None
-
+    id : int
+    product_id : int
+    quantity : int

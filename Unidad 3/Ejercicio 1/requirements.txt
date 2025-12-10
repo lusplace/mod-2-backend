@@ -4,3 +4,6 @@ fastapi
 fastapi[standard]
 pydantic
 bintrees
+array
+typing
+json

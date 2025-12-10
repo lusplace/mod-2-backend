@@ -4,6 +4,7 @@ import json
 from fastapi import FastAPI
 from bintrees import AVLTree
 from fastapi.responses import JSONResponse
+from order import *
 
 db = dbConnection()
 
@@ -39,8 +40,53 @@ async def get_product(id: int):
     return JSONResponse(content=product, status_code=200)
 
 #c. Crear nuevo pedido.\
+@app.post("/orders/add/{id}")
+async def create_order(id: int):
+    try:
+        order = db.create_order(id)
+        if order is not None:
+            return JSONResponse(content=order.to_dict(), status_code=200)
+    except Exception as e:
+        print("The error is: ",e)
+    return JSONResponse(content=f"order {id} already exists", status_code=403)
 
 #d. Consultar información de pedido por ID.\
+@app.get("/orders/{id}")
+async def get_order(id: int):
+    try:
+        order = db.get_order(id)
+        return JSONResponse(content=order, status_code=200)
+    except Exception as e:
+        print("The error is: ",e)
+        return JSONResponse(content=f"order {id} doesnt exist", status_code=404)
+
 #e. Actualizar un pedido existente.\
+@app.patch("/orders/update")
+async def update_order(order: OrderUpdate):
+    try:
+        order = db.update_order(order)
+        if(order is not None):
+            return JSONResponse(content=order, status_code=200)
+    except Exception as e:
+        print("The error is: ",e)
+    return JSONResponse(content=f"order {id} doesnt exist", status_code=404)
+
 #f. Eliminar un pedido.\
+@app.delete("/orders/delete/{id}")
+async def delete_order(id: int):
+    try:
+        order = db.delete_order(id)
+        return JSONResponse(content=f"order {id} deleted", status_code=200)
+    except Exception as e:
+        print("The error is: ",e)
+        return JSONResponse(content=f"order {id} doesnt exist", status_code=404)
+
 #g. Listar todos los pedidos.
+@app.get("/orders/")
+async def get_all_orders():
+    try:
+        orders = db.get_all_orders()
+        return JSONResponse(content=orders, status_code=200)
+    except Exception as e:
+        print("The error is: ",e)
+        return JSONResponse(content=f"order {id} doesnt exist", status_code=404)

@@ -1,6 +1,10 @@
 from product import *
+from order import *
 from bintrees import AVLTree
 import json
+from typing import TypeVar, List, Generic, Optional
+import array
+from linkedList import *
 
 class Singleton(type):
     _instances = {}
@@ -13,7 +17,6 @@ class dbConnection(metaclass=Singleton):
 
     def __init__(self, products_mock_file : str = "./mock_products.json", orders_mock_file : str = "./mock_orders.json"):
         self.data_file = products_mock_file
-        self._lock = False
         self.product_tree = dbConnection.init_tree(products_mock_file)
         self.linked_orders = dbConnection.init_order_list(orders_mock_file)
 
@@ -38,14 +41,16 @@ class dbConnection(metaclass=Singleton):
             print("DB Setup successfull!")
         return tree
 
-    def init_order_list(orders_mock_file) -> LinkedList:
+    def init_order_list(self) -> LinkedList:
+        linkedList = LinkedList(OrderBase)
+        return linkedList
+
         data = []
         try:
             with open(orders_mock_file, 'r') as file:
                 data = json.load(file)
         except FileNotFoundError:
             print(f"Error: The file '{orders_mock_file}' was not found.")
-        linkedList = LinkedList()
         number_of_mistakes = 0
 
         for item in data:
@@ -60,7 +65,6 @@ class dbConnection(metaclass=Singleton):
         return linkedList
 
     def insert_product(self, product : ProductBase) -> bool:
-        self.get_lock()
         try:
             key = hash(product.product_id)
             self.product_tree.insert(key, product)
@@ -68,17 +72,10 @@ class dbConnection(metaclass=Singleton):
         except: 
             print("Error inserting Product")
             status = False
-        finally:
-            self.release_lock()
         return status
         
     def remove_product(self, product_id: int) -> ProductBase | None:
         wait_time = 0
-        while self._lock:
-            time.wait(0.5)
-            wait_time += 0.5
-            print(f"waiting for {wait_time}")
-        self._lock = True
         if self.product_tree is None:
             self.product_tree = init_tree()
 
@@ -88,47 +85,48 @@ class dbConnection(metaclass=Singleton):
         except:
             print("error occurred")
             removed = None
-        finally:
-            self._lock = False
         return removed
 
     def get_product(self, product_id: int) -> ProductBase | None:
-
-        self.get_lock()
         try:
             product = self.product_tree.get(hash(product_id))
         except:
             print("error occurred")
             product = None
-        finally:
-            self.release_lock()
         return product
 
-    def get_lock(self):
-        wait_time = 0
-        while self._lock:
-            time.wait(0.5)
-            wait_time += 0.5
-            print(f"waiting for {wait_time}")
-        self._lock = True
+    def create_order(self, id : int):
+        order = OrderBase(id = id)
+        result = self.linked_orders.insert_at_beginning(order)
+        return result
+
+    def get_order(self, id : int):
+        order = self.linked_orders.getNode(id)
+        return order.to_dict()
     
-    def release_lock(self):
-        if not self._lock:
-            print("DB might be compromised")
-        self._lock = False
+    def get_all_orders(self):
+        orders = self.linked_orders.all_values()
+        return orders
+
+    def update_order(self, orderUpdate:OrderUpdate) -> OrderBase | str:
+        order_id = orderUpdate.id
+
+        orderNode = self.linked_orders.getNode(order_id)
+        if orderNode is None: return 
+        order = orderNode.value
+        productId = orderUpdate.product_id
+
+        if self.get_product(productId) is not None:
+            order.modify_order(productId, orderUpdate.quantity)
+            mod_order = self.linked_orders.setNode(order)
+            return mod_order.to_dict()
+        else: 
+            return f"Product {productId} Not Found"
+        return None
 
 
 def is_valid_product(item):
     p_id = item.get('product_id')
-    p_name = item.get('name')
-    p_price = item.get('price')
-    if p_id is None or p_name is None or p_name == 0 or p_price is None:
-        return False
-    return True
-
-def is_valid_order(item):
-    ## TODO
-    p_id = item.get('order_id')
     p_name = item.get('name')
     p_price = item.get('price')
     if p_id is None or p_name is None or p_name == 0 or p_price is None:
