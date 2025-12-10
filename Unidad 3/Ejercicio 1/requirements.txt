@@ -1,0 +1,9 @@
+uvicorn[standard]
+python-dotenv
+fastapi
+fastapi[standard]
+pydantic
+bintrees
+array
+typing
+json

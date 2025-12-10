@@ -1,13 +1,16 @@
 # mod-2-backend
 Ejercicios en el master de desarrollo web
 
-## Unidad 2 Ejercicio 1: API con Fastapi e integración de SPOTIFY
+Aquí las instrucciones del ejercicio más reciente
+## Unidad 3: Serialización
+
+>**disclaimer** Se ha utilizado el término order para *pedido* y *product* para producto en este ejercicio.
 
 ### RUN THE PROJECT
 
 1. Ubícate en
->cd Unidad 2/Ejercicio 1/
-2. COnvierte run.sh en ejecutable
+>cd Unidad 3/Ejercicio 1/
+2. Convierte run.sh en ejecutable (Mira 2.5 si no estás en linux)
 > chmod +x ./run.sh
 
 3. Ejecuta
@@ -15,7 +18,6 @@ Ejercicios en el master de desarrollo web
 
 2.5. O ejecuta las 3 sentencias en él (ignora el paso 3 en este caso)
 
-> docker compose up -d
 > pip install -r ./requirements.txt
 > fastapi run ./main.py
 
@@ -24,19 +26,10 @@ Ejercicios en el master de desarrollo web
 >Ctrl + C 
 en la consola en la que s eejecuta el proyecto
 
->docker container ls
-busca el contenedor de nombre 'ejercicio1-db-1'
-y anota el CONTAINER_ID, que llamaremos IDENTIFICADOR
-
-ejecuta:
->docker docker container kill IDENTIFICADOR
-
 ### Dependencias del proyecto
 
 Este campo no cubre lo presente en archivos requirements.txt para python
 
-docker
-docker compose
 python 3.10
 pip
 
@@ -45,36 +38,48 @@ pip
 POP!_Os 22.04
 (Equivalente a Ubuntu 22.04 a nivel técnico)
 
-### Modelo de .env
+### Lista de llamadas a la API
 
-Estos valores se usarán en el contenedor y en la aplicación
+Con url base 127.0.0.1:8000
 
-Ubicación respecto del repositorio:
-/Unidad 2/Ejercicio 1/.env
+#### Products
+ - /products/{id}
+    - Get básico para un producto, hay 50 como mock
+ - /products/add
+    - Ejemplo de Body de la request
+>   
+    {
+        "product_id": 1024,
+        "name": "FooBar",
+        "price": 66.99
+    }
 
-#### Ejemplo:
-export SPOTFY_URI="http://127.0.0.1:PUERTO"\
-export CLIENT_ID="CLIENTID"\
-export CLIENT_SECRET="CLIENTSECRET"\
-\
-export MYSQL_ROOT_PASSWORD= "PASSWORD"\
-export MYSQL_DATABASE= "DATABASENAME"\
-export MYSQL_USER= "USER"\
-export MYSQL_ROOT_USER= "root"\
-export MYSQL_PASSWORD= "PASSWORD"\
-export MYSQL_HOST= "127.0.0.1"\
-export MYSQL_PORT= "PORT"\
+#### Orders
 
-export HOST_LOCATION= "127.0.0.1:8000"
+ - /orders/add/{id}
+    - Obtiene una petición u order por id, inicialmente hay 50 cargados
+ - /orders
+ - /orders/update
+    - El cuerpo de la request no es un objeto *order* al uso, sino que obedece a añadir un número *quantity* (que puede ser negativo, siendo que dejando la cantidad de un producto en 0 o menos se elimina el id de producto del objeto order) del producto con un identificador *product_id* para verificar que el producto existe.
+    Ejemplo de *body* de la request
+
+>
+    {   
+        "id": 9,
+        "product_id": 34,
+        "quantity": 33
+    }
+
+
+#### Serialización
+ - Se ha implementado una función to_dict oara convertir los objetos precisos en un diccionario, lo que es en sí un objeto de javascript.
+
+
 
 ### Anotaciones y Comentarios
 
-EL volumen de docker con los datos se guardará en la carpeta /Unidad 2/Ejercicio 1/local
+Hash: El hash automatico que he utilizado, esta en una función en la clase BasewithId.
+Efectivamente para este proyecto devuelve el valor id que le pases, como *str*.
 
-(El gitignore contempla no añadir estos archivos)
 
-init.sql no se ejecuta, pero en el codigo python se realiza la misma creación de tablas de no existir las mismas.
 
-Estos datos se moveran a archivos .md o ipynb en la carpeta 'Unidad 2/Ejercicio 1' a futuro
-
-Deuda técnica: mover funciones a sus propios archivos y usar patrones de diseño adecuados.
