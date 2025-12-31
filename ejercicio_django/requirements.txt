@@ -1,1 +1,7 @@
 dotenv
+django
+requests
+datetime
+json
+base64
+rest_framework
