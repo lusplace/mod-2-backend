@@ -73,8 +73,7 @@ def get_user_by_username(request, username, *arg, **kwargs):
         return JsonResponse({'status':'true','message':str(user)}, status=200, safe=False)
 
     except User.DoesNotExist:
-        messages.error(request, "User does not exist")    
-        return JsonResponse({'status':'false','message':"user not found"}, status=404, safe=False)
+        return JsonResponse({'status':'false','message':"user doesnt exist, check spelling"}, status=404, safe=False)
 
     except Exception as e: 
         return JsonResponse({'status':'false','message':f"error accessing db"}, status=401, safe=False)
