@@ -42,7 +42,6 @@ def add_user(request):
     except:
         print("Error creating user")
 
-
     return JsonResponse({'error': "bad request"}, status=404)
 
 # READ MANY
@@ -59,7 +58,6 @@ def get_users(request, *arg, **kwargs):
     )
     data = serializers.serialize("json", users)
 
-    #json = serializers.serialize("json", users, fields=[ALLOWED_FILTERS, 'id'])
     return JsonResponse({'users': json.loads(data)}, safe=False)
 
 @api_view(['GET'])

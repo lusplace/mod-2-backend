@@ -7,7 +7,7 @@ spotifyBaseLink = 'https://api.spotify.com/v1/'
 
 class SpotifyObject(models.Model):
     name = models.CharField(max_length=30, default='')
-    spotify_id = models.CharField(max_length=30, default='')
+    spotify_id = models.CharField(max_length=30, unique=True)
     REQUIRED_FIELDS = ['spotify_id', 'name']
     
     def __str__(self):
@@ -16,12 +16,12 @@ class SpotifyObject(models.Model):
     def url(self):
         return ""
 
-class Song(SpotifyObject):
+class Track(SpotifyObject):
     def link(self):
         return f"{spotifyBaseLink}track/{self.spotify_id}"
 
     def __str__(self):
-        return f"Song: {self.name}"
+        return f"Track: {self.name}"
     
     def url(self):
         return f"https://api.spotify.com/v1/tracks/{self.spotify_id}"
@@ -54,10 +54,12 @@ class Preferences(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    songs = models.ManyToManyField(Song, blank=True, null=True)
-    artists = models.ManyToManyField(Artist, blank=True, null=True)
-    albums = models.ManyToManyField(Album, blank=True, null=True)
+    tracks = models.ManyToManyField(Track, blank=True)
+    artists = models.ManyToManyField(Artist, blank=True)
+    albums = models.ManyToManyField(Album, blank=True)
 
     def __str__(self):
         return f"{self.user.username}'s preferences"
+
+
 

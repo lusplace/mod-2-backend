@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('music/', include('music.urls')),
     path('users/', include('userManager.urls')),
-    path('/', include('music.urls')),
+    #path('/', include('music.urls')),
 
     #path('api_view/', include('api_view.urls')),
 ]
