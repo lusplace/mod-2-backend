@@ -48,6 +48,8 @@
     - En el archivo db_migration.db en esta carpeta
 
 ### Conclusiones y Observaciones
+Los datos del ultimo datadump quedaron pendientes de importar con mysql, que está en el puerto 13306.
+
 
 
 ## Referencias usadas aparte de clases
