@@ -18,18 +18,18 @@
 
 1. Utilizar al menos *4 vistas genéricas distintos para cada modelo*.
     1. Chatroom
-        1. Cualquier jugador puede crear una (puede tener hasta 5 activas)
+        1. Cualquier jugador puede crear una
         1. Get my chatrooms, get all public chatrooms
         1. Modify chatroom, name or description
-        1. Delete chatroom i am owner of or i am admin
+        1. Delete chatroom i am owner of
     1. Message
         1. Create Message
         1. Get sent messages by ME
-        1. Edit message
-        1. Delete message sent up to 1 day ago
+        1. Edit message done by me
+        1. Delete message done by me
 
 1. Al menos un *api_view propia que enlace modelos* (que no sean vistas genéricas)
-    1. Numero de mensajes por chatroom
+    1. ChatRoomStats: Numero de chatrooms de los que el usuario es propietario.
 
 1. Implementar al menos dos modelos.
     1. Chatroom
