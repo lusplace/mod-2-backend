@@ -1,0 +1,9 @@
+requests
+django
+djangorestframework
+daphne
+channels
+channels_redis
+selenium
+python-dotenv
+mysqlclient
